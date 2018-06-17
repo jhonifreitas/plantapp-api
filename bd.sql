@@ -12,7 +12,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Copiando estrutura para tabela plantapp.cameras
-DROP TABLE IF EXISTS `cameras`;
 CREATE TABLE IF NOT EXISTS `cameras` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -35,7 +34,6 @@ INSERT INTO `cameras` (`id`, `client_id`, `url`, `name`, `active`, `created`, `m
 /*!40000 ALTER TABLE `cameras` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.citys
-DROP TABLE IF EXISTS `citys`;
 CREATE TABLE IF NOT EXISTS `citys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `state_id` int(11) NOT NULL,
@@ -5616,7 +5614,6 @@ INSERT INTO `citys` (`id`, `state_id`, `name`) VALUES
 /*!40000 ALTER TABLE `citys` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.clients
-DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `city_id` int(11) NOT NULL,
@@ -5642,7 +5639,6 @@ INSERT INTO `clients` (`id`, `city_id`, `name`, `email`, `phone`, `address`, `di
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.dashboard
-DROP TABLE IF EXISTS `dashboard`;
 CREATE TABLE IF NOT EXISTS `dashboard` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plantation_id` int(11) NOT NULL,
@@ -5661,7 +5657,6 @@ DELETE FROM `dashboard`;
 /*!40000 ALTER TABLE `dashboard` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.groups
-DROP TABLE IF EXISTS `groups`;
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -5684,19 +5679,19 @@ INSERT INTO `groups` (`id`, `client_id`, `name`, `permissions`, `active`, `creat
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.microcontrollers
-DROP TABLE IF EXISTS `microcontrollers`;
 CREATE TABLE IF NOT EXISTS `microcontrollers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
   `external_ip` varchar(15) NOT NULL,
   `local_ip` varchar(15) NOT NULL,
+  `port` int(4) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `FK_client_micro` (`client_id`),
   CONSTRAINT `FK_client_micro` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.microcontrollers: ~0 rows (aproximadamente)
 DELETE FROM `microcontrollers`;
@@ -5704,7 +5699,6 @@ DELETE FROM `microcontrollers`;
 /*!40000 ALTER TABLE `microcontrollers` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.modules
-DROP TABLE IF EXISTS `modules`;
 CREATE TABLE IF NOT EXISTS `modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5726,7 +5720,6 @@ INSERT INTO `modules` (`id`, `name`, `created`, `modified`) VALUES
 /*!40000 ALTER TABLE `modules` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.places
-DROP TABLE IF EXISTS `places`;
 CREATE TABLE IF NOT EXISTS `places` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -5739,7 +5732,7 @@ CREATE TABLE IF NOT EXISTS `places` (
   CONSTRAINT `FK_client_places` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Copiando dados para a tabela plantapp.places: ~1 rows (aproximadamente)
+-- Copiando dados para a tabela plantapp.places: ~0 rows (aproximadamente)
 DELETE FROM `places`;
 /*!40000 ALTER TABLE `places` DISABLE KEYS */;
 INSERT INTO `places` (`id`, `client_id`, `name`, `active`, `created`, `modified`) VALUES
@@ -5747,7 +5740,6 @@ INSERT INTO `places` (`id`, `client_id`, `name`, `active`, `created`, `modified`
 /*!40000 ALTER TABLE `places` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.plantations
-DROP TABLE IF EXISTS `plantations`;
 CREATE TABLE IF NOT EXISTS `plantations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `place_id` int(11) NOT NULL,
@@ -5764,7 +5756,7 @@ CREATE TABLE IF NOT EXISTS `plantations` (
   KEY `FK_micro_plantations` (`micro_id`),
   CONSTRAINT `FK_micro_plantations` FOREIGN KEY (`micro_id`) REFERENCES `microcontrollers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_place_plantations` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.plantations: ~0 rows (aproximadamente)
 DELETE FROM `plantations`;
@@ -5772,7 +5764,6 @@ DELETE FROM `plantations`;
 /*!40000 ALTER TABLE `plantations` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.plants_types
-DROP TABLE IF EXISTS `plants_types`;
 CREATE TABLE IF NOT EXISTS `plants_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type_id` int(11) NOT NULL,
@@ -5783,7 +5774,7 @@ CREATE TABLE IF NOT EXISTS `plants_types` (
   KEY `FK_plant_plants_types` (`plant_id`),
   CONSTRAINT `FK_plant_plants_types` FOREIGN KEY (`plant_id`) REFERENCES `plantations` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_type_plants_types` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.plants_types: ~0 rows (aproximadamente)
 DELETE FROM `plants_types`;
@@ -5791,7 +5782,6 @@ DELETE FROM `plants_types`;
 /*!40000 ALTER TABLE `plants_types` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.states
-DROP TABLE IF EXISTS `states`;
 CREATE TABLE IF NOT EXISTS `states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5833,7 +5823,6 @@ INSERT INTO `states` (`id`, `name`, `uf`) VALUES
 /*!40000 ALTER TABLE `states` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.types
-DROP TABLE IF EXISTS `types`;
 CREATE TABLE IF NOT EXISTS `types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5855,7 +5844,6 @@ INSERT INTO `types` (`id`, `name`, `icon`, `active`, `created`, `modified`) VALU
 /*!40000 ALTER TABLE `types` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,

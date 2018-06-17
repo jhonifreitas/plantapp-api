@@ -6,8 +6,6 @@ namespace controllers{
 		private $PDO;
 		private $APP;
 		private $return;
-		private $external_ip = '201.15.157.52';
-		private $port_open = 301;
  
 		function __construct(){
 			global $app;
@@ -376,8 +374,13 @@ namespace controllers{
 
 			$postData = 'plant_id='.$request->plant_id.'&type_id='.$request->type_id.'&status='.$request->status;
 
-		    $ch = curl_init();
-		    curl_setopt($ch,CURLOPT_URL, 'http://'.$this->external_ip.':'.$this->port_open);
+			$acao = $this->PDO->prepare("SELECT micro.* FROM plantations plant INNER JOIN microcontrollers micro ON (micro.id = plant.micro_id) WHERE plant.id = :id");
+			$acao->bindValue(":id", $request->plant_id);
+			$acao->execute();
+			$result = $acao->fetch();
+
+			$ch = curl_init();
+		    curl_setopt($ch,CURLOPT_URL, 'http://'.$result->external_ip.':'.$result->port);
 		    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 		    // curl_setopt($ch,CURLOPT_HEADER, false); //if you want headers
 
@@ -409,17 +412,18 @@ namespace controllers{
 			$result = $acao->fetch();
 
 			if (!empty($result)) {
-				$acao = $this->PDO->prepare("UPDATE microcontrollers SET external_ip = :external_ip, local_ip = :local_ip, active = :active WHERE id = :id");
+				$acao = $this->PDO->prepare("UPDATE microcontrollers SET external_ip = :external_ip, local_ip = :local_ip, port = :port, active = :active WHERE id = :id");
 				$acao->bindValue(":id", $result->id);
-				$active = $request->active;
+				$active = (!empty($request->active) ? $request->active : 1);
 			}else{
-				$acao = $this->PDO->prepare("INSERT INTO microcontrollers (client_id, external_ip, local_ip, active) VALUES (:client_id, :external_ip, :local_ip, :active)");
+				$acao = $this->PDO->prepare("INSERT INTO microcontrollers (client_id, external_ip, local_ip, port, active) VALUES (:client_id, :external_ip, :local_ip, :port, :active)");
 				$acao->bindValue(":client_id", $request->client_id);
 				$active = 1;
 			}
 
 			$acao->bindValue(":external_ip", $request->external_ip);
 			$acao->bindValue(":local_ip", $request->local_ip);
+			$acao->bindValue(":port", $request->port);
 			$acao->bindValue(":active", $active);
 
 			$this->return->data = 'Sucesso!';
