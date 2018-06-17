@@ -6,7 +6,7 @@ namespace controllers{
 		private $PDO;
 		private $APP;
 		private $return;
-		private $ip_extern = '201.15.157.52';
+		private $external_ip = '201.15.157.52';
 		private $port_open = 301;
  
 		function __construct(){
@@ -377,7 +377,7 @@ namespace controllers{
 			$postData = 'plant_id='.$request->plant_id.'&type_id='.$request->type_id.'&status='.$request->status;
 
 		    $ch = curl_init();
-		    curl_setopt($ch,CURLOPT_URL, 'http://'.$this->ip_extern.':'.$this->port_open);
+		    curl_setopt($ch,CURLOPT_URL, 'http://'.$this->external_ip.':'.$this->port_open);
 		    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 		    // curl_setopt($ch,CURLOPT_HEADER, false); //if you want headers
 
@@ -413,8 +413,8 @@ namespace controllers{
 				$acao->bindValue(":id", $result->id);
 				$active = $request->active;
 			}else{
-				$acao = $this->PDO->prepare("INSERT INTO microcontrollers (external_ip, local_ip, active) VALUES (:external_ip, :local_ip, :active)");
-				$acao->bindValue(":client_id", $result->client_id);
+				$acao = $this->PDO->prepare("INSERT INTO microcontrollers (client_id, external_ip, local_ip, active) VALUES (:client_id, :external_ip, :local_ip, :active)");
+				$acao->bindValue(":client_id", $request->client_id);
 				$active = 1;
 			}
 
