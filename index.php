@@ -99,10 +99,14 @@ $app->post('/changeStatusPlantation', function() use ($app, $request){
 });
 
 // =====================================================
-// ************* Muda o Status da Plantação ************
+// ****************** Microcontrollers *****************
 // =====================================================
-$app->post('/setExternalIP', function() use ($app, $request){
-    return (new \controllers\Api($app))->setExternalIP($request);
+$app->post('/setMicrocontrollers', function() use ($app, $request){
+    return (new \controllers\Api($app))->setMicrocontrollers($request);
+});
+
+$app->post('/getMicrocontrollers', function() use ($app, $request){
+    return (new \controllers\Api($app))->getMicrocontrollers($request);
 });
 
 // =====================================================

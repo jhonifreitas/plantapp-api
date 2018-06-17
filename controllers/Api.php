@@ -117,11 +117,11 @@ namespace controllers{
 		public function setPlantacao($request){
 
 			if (!empty($request->id)) {
-				$acao = $this->PDO->prepare("UPDATE plantations SET name = :name, hour_begin = :hour_begin, hour_end = :hour_end, repeated = :repeated, active = :active WHERE id = :id");
+				$acao = $this->PDO->prepare("UPDATE plantations SET micro_id = :micro_id, name = :name, hour_begin = :hour_begin, hour_end = :hour_end, repeated = :repeated, active = :active WHERE id = :id");
 				$acao->bindValue(":id", $request->id);
 				$active = $request->active;
 			}else{
-				$acao = $this->PDO->prepare("INSERT INTO plantations (place_id, name, hour_begin, hour_end, repeated, active) VALUES (:place_id, :name, :hour_begin, :hour_end, :repeated, :active)");
+				$acao = $this->PDO->prepare("INSERT INTO plantations (place_id, micro_id, name, hour_begin, hour_end, repeated, active) VALUES (:place_id, :micro_id, :name, :hour_begin, :hour_end, :repeated, :active)");
 				$acao->bindValue(":place_id", $request->place_id);
 				$active = 1;
 			}
@@ -132,6 +132,7 @@ namespace controllers{
 				$request->hour_end = null;
 			}
 
+			$acao->bindValue(":micro_id", $request->micro_id);
 			$acao->bindValue(":name", $request->name);
 			$acao->bindValue(":hour_begin", $request->hour_begin);
 			$acao->bindValue(":hour_end", $request->hour_end);
@@ -398,8 +399,47 @@ namespace controllers{
 			return $curl_response;
 		}
 
-		public function setExternalIP($request){
+		public function setMicrocontrollers($request){
 			
+			$acao = $this->PDO->prepare("SELECT * FROM microcontrollers WHERE external_ip = :external_ip and client_id = :client_id and local_ip = :local_ip");
+			$acao->bindValue(":client_id", $request->client_id);
+			$acao->bindValue(":external_ip", $request->external_ip);
+			$acao->bindValue(":local_ip", $request->local_ip);
+			$acao->execute();
+			$result = $acao->fetch();
+
+			if (!empty($result)) {
+				$acao = $this->PDO->prepare("UPDATE microcontrollers SET external_ip = :external_ip, local_ip = :local_ip, active = :active WHERE id = :id");
+				$acao->bindValue(":id", $result->id);
+				$active = $request->active;
+			}else{
+				$acao = $this->PDO->prepare("INSERT INTO microcontrollers (external_ip, local_ip, active) VALUES (:external_ip, :local_ip, :active)");
+				$acao->bindValue(":client_id", $result->client_id);
+				$active = 1;
+			}
+
+			$acao->bindValue(":external_ip", $request->external_ip);
+			$acao->bindValue(":local_ip", $request->local_ip);
+			$acao->bindValue(":active", $active);
+
+			$this->return->data = 'Sucesso!';
+			if (!$acao->execute()) {
+				$this->return->status = false;
+				$this->return->data = 'Erro!';
+			}
+
+			return $this->APP->json($this->return); 
+		}
+
+		public function getMicrocontrollers($request){
+			$acao = $this->PDO->prepare("SELECT * FROM microcontrollers WHERE client_id = :client_id");
+			$acao->bindValue(":client_id", $request->client_id);
+			$acao->execute();
+			$result = $acao->fetchAll();
+
+			$this->return->data = $result;
+
+			return $this->APP->json($this->return); 
 		}
 	}
 }

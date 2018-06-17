@@ -12,6 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Copiando estrutura para tabela plantapp.cameras
+DROP TABLE IF EXISTS `cameras`;
 CREATE TABLE IF NOT EXISTS `cameras` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -25,7 +26,8 @@ CREATE TABLE IF NOT EXISTS `cameras` (
   CONSTRAINT `FK_client_cameras` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Copiando dados para a tabela plantapp.cameras: ~1 rows (aproximadamente)
+-- Copiando dados para a tabela plantapp.cameras: ~0 rows (aproximadamente)
+DELETE FROM `cameras`;
 /*!40000 ALTER TABLE `cameras` DISABLE KEYS */;
 INSERT INTO `cameras` (`id`, `client_id`, `url`, `name`, `active`, `created`, `modified`) VALUES
 	(1, 1, 'https://191.1.1.1', 'Camera 1', 1, '2018-04-10 18:24:34', '2018-04-21 10:45:20'),
@@ -33,6 +35,7 @@ INSERT INTO `cameras` (`id`, `client_id`, `url`, `name`, `active`, `created`, `m
 /*!40000 ALTER TABLE `cameras` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.citys
+DROP TABLE IF EXISTS `citys`;
 CREATE TABLE IF NOT EXISTS `citys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `state_id` int(11) NOT NULL,
@@ -43,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `citys` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5565 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.citys: ~5.564 rows (aproximadamente)
+DELETE FROM `citys`;
 /*!40000 ALTER TABLE `citys` DISABLE KEYS */;
 INSERT INTO `citys` (`id`, `state_id`, `name`) VALUES
 	(1, 8, 'Afonso Cláudio'),
@@ -5612,6 +5616,7 @@ INSERT INTO `citys` (`id`, `state_id`, `name`) VALUES
 /*!40000 ALTER TABLE `citys` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.clients
+DROP TABLE IF EXISTS `clients`;
 CREATE TABLE IF NOT EXISTS `clients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `city_id` int(11) NOT NULL,
@@ -5630,12 +5635,14 @@ CREATE TABLE IF NOT EXISTS `clients` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.clients: ~1 rows (aproximadamente)
+DELETE FROM `clients`;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
 INSERT INTO `clients` (`id`, `city_id`, `name`, `email`, `phone`, `address`, `district`, `complement`, `active`, `created`, `modified`) VALUES
 	(1, 3945, 'admin', 'freitas.jonathan08@gmail.com', '(54) 991566715', 'rua joão andriollo, 4780', 'ana rech', 'apto 10', 1, '2018-04-04 21:10:51', '2018-04-08 14:47:37');
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.dashboard
+DROP TABLE IF EXISTS `dashboard`;
 CREATE TABLE IF NOT EXISTS `dashboard` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plantation_id` int(11) NOT NULL,
@@ -5649,10 +5656,12 @@ CREATE TABLE IF NOT EXISTS `dashboard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.dashboard: ~0 rows (aproximadamente)
+DELETE FROM `dashboard`;
 /*!40000 ALTER TABLE `dashboard` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dashboard` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.groups
+DROP TABLE IF EXISTS `groups`;
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -5667,13 +5676,35 @@ CREATE TABLE IF NOT EXISTS `groups` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.groups: ~0 rows (aproximadamente)
+DELETE FROM `groups`;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
 INSERT INTO `groups` (`id`, `client_id`, `name`, `permissions`, `active`, `created`, `modified`) VALUES
 	(1, 1, 'Administrador', '{"dashboard":["view"],"locais":["view","add","edit","del"],"plantacoes":["view","add","edit","del"],"cameras":["view","add","edit","del"],"grupos":["view","add","edit","del"],"usuarios":["view","add","edit","del"]}', 1, '2018-04-04 21:12:08', '2018-04-21 15:13:26'),
 	(2, 1, 'Familia', '{"dashboard":["view"],"locais":["add","edit","del"],"plantacoes":["view","del"],"cameras":["view"]}', 1, '2018-04-08 17:33:15', '2018-04-08 17:33:26');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 
+-- Copiando estrutura para tabela plantapp.microcontrollers
+DROP TABLE IF EXISTS `microcontrollers`;
+CREATE TABLE IF NOT EXISTS `microcontrollers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) NOT NULL,
+  `external_ip` varchar(15) NOT NULL,
+  `local_ip` varchar(15) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_client_micro` (`client_id`),
+  CONSTRAINT `FK_client_micro` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- Copiando dados para a tabela plantapp.microcontrollers: ~0 rows (aproximadamente)
+DELETE FROM `microcontrollers`;
+/*!40000 ALTER TABLE `microcontrollers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `microcontrollers` ENABLE KEYS */;
+
 -- Copiando estrutura para tabela plantapp.modules
+DROP TABLE IF EXISTS `modules`;
 CREATE TABLE IF NOT EXISTS `modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5683,6 +5714,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.modules: 6 rows
+DELETE FROM `modules`;
 /*!40000 ALTER TABLE `modules` DISABLE KEYS */;
 INSERT INTO `modules` (`id`, `name`, `created`, `modified`) VALUES
 	(1, 'Dashboard', '2018-04-08 16:25:13', '2018-04-08 16:27:16'),
@@ -5694,6 +5726,7 @@ INSERT INTO `modules` (`id`, `name`, `created`, `modified`) VALUES
 /*!40000 ALTER TABLE `modules` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.places
+DROP TABLE IF EXISTS `places`;
 CREATE TABLE IF NOT EXISTS `places` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -5704,50 +5737,61 @@ CREATE TABLE IF NOT EXISTS `places` (
   PRIMARY KEY (`id`),
   KEY `FK_client_places` (`client_id`),
   CONSTRAINT `FK_client_places` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- Copiando dados para a tabela plantapp.places: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela plantapp.places: ~1 rows (aproximadamente)
+DELETE FROM `places`;
 /*!40000 ALTER TABLE `places` DISABLE KEYS */;
+INSERT INTO `places` (`id`, `client_id`, `name`, `active`, `created`, `modified`) VALUES
+	(1, 1, 'Sul', 1, '2018-06-16 17:34:12', '2018-06-16 17:34:12');
 /*!40000 ALTER TABLE `places` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.plantations
+DROP TABLE IF EXISTS `plantations`;
 CREATE TABLE IF NOT EXISTS `plantations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `place_id` int(11) NOT NULL,
+  `micro_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `hour_begin` time DEFAULT NULL,
   `hour_end` time DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
   `repeated` tinyint(1) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `FK_place_plantations` (`place_id`),
+  KEY `FK_micro_plantations` (`micro_id`),
+  CONSTRAINT `FK_micro_plantations` FOREIGN KEY (`micro_id`) REFERENCES `microcontrollers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_place_plantations` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.plantations: ~0 rows (aproximadamente)
+DELETE FROM `plantations`;
 /*!40000 ALTER TABLE `plantations` DISABLE KEYS */;
 /*!40000 ALTER TABLE `plantations` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.plants_types
+DROP TABLE IF EXISTS `plants_types`;
 CREATE TABLE IF NOT EXISTS `plants_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type_id` int(11) NOT NULL,
   `plant_id` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_type_plants_types` (`type_id`),
   KEY `FK_plant_plants_types` (`plant_id`),
   CONSTRAINT `FK_plant_plants_types` FOREIGN KEY (`plant_id`) REFERENCES `plantations` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_type_plants_types` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.plants_types: ~0 rows (aproximadamente)
+DELETE FROM `plants_types`;
 /*!40000 ALTER TABLE `plants_types` DISABLE KEYS */;
 /*!40000 ALTER TABLE `plants_types` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.states
+DROP TABLE IF EXISTS `states`;
 CREATE TABLE IF NOT EXISTS `states` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5756,6 +5800,7 @@ CREATE TABLE IF NOT EXISTS `states` (
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.states: ~27 rows (aproximadamente)
+DELETE FROM `states`;
 /*!40000 ALTER TABLE `states` DISABLE KEYS */;
 INSERT INTO `states` (`id`, `name`, `uf`) VALUES
 	(1, 'Acre', 'AC'),
@@ -5788,6 +5833,7 @@ INSERT INTO `states` (`id`, `name`, `uf`) VALUES
 /*!40000 ALTER TABLE `states` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.types
+DROP TABLE IF EXISTS `types`;
 CREATE TABLE IF NOT EXISTS `types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -5799,6 +5845,7 @@ CREATE TABLE IF NOT EXISTS `types` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.types: ~4 rows (aproximadamente)
+DELETE FROM `types`;
 /*!40000 ALTER TABLE `types` DISABLE KEYS */;
 INSERT INTO `types` (`id`, `name`, `icon`, `active`, `created`, `modified`) VALUES
 	(1, 'Irrigação', '', 1, '2018-04-07 22:02:57', '2018-04-07 22:03:24'),
@@ -5808,6 +5855,7 @@ INSERT INTO `types` (`id`, `name`, `icon`, `active`, `created`, `modified`) VALU
 /*!40000 ALTER TABLE `types` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela plantapp.users
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `client_id` int(11) NOT NULL,
@@ -5829,6 +5877,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- Copiando dados para a tabela plantapp.users: ~3 rows (aproximadamente)
+DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `client_id`, `group_id`, `thumbnail`, `name`, `phone`, `email`, `username`, `password`, `active`, `created`, `modified`) VALUES
 	(1, 1, 1, NULL, 'admin', '(54) 99156-6715', 'freitas.jonathan08@gmail.com', 'admin', '$2y$10$rcZoCFRKG3TlhRfTdzXje.mVt2KXWYp9PudhJy2Hubbm9xcClPxRG', 1, '2018-04-04 21:13:08', '2018-04-08 21:32:02'),
