@@ -92,6 +92,13 @@ $app->post('/setCameras', function() use ($app, $request){
 });
 
 // =====================================================
+// ********************** Clientes *********************
+// =====================================================
+$app->post('/setClient', function() use ($app, $request){
+    return (new \controllers\Api($app))->setClient($request);
+});
+
+// =====================================================
 // ************* Muda o Status da Plantação ************
 // =====================================================
 $app->post('/changeStatusPlantation', function() use ($app, $request){

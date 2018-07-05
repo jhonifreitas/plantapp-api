@@ -322,6 +322,35 @@ namespace controllers{
 			return $this->APP->json($this->return); 
 		}
 
+		public function setClient($request){
+			if (!empty($request->id)) {
+				$acao = $this->PDO->prepare("UPDATE clients SET host_api_local = :host_api_local, active = :active WHERE id = :id");
+				$acao->bindValue(":id", $request->id);
+				$active = $request->active;
+			}else{
+				$acao = $this->PDO->prepare("INSERT INTO clients (city_id, name, email, phone, address, district, complement, host_api_local, active) VALUES (:city_id, :name, :email, :phone, :address, :district, :complement, :host_api_local, :active)");
+				$acao->bindValue(":city_id", $request->city_id);
+				$acao->bindValue(":name", $request->name);
+				$acao->bindValue(":email", $request->email);
+				$acao->bindValue(":phone", $request->phone);
+				$acao->bindValue(":address", $request->address);
+				$acao->bindValue(":district", $request->district);
+				$acao->bindValue(":complement", $request->complement);
+				$active = 1;
+			}
+
+			$acao->bindValue(":host_api_local", $request->host_api_local);
+			$acao->bindValue(":active", $active);
+
+			$this->return->data = 'Sucesso!';
+			if (!$acao->execute()) {
+				$this->return->status = false;
+				$this->return->data = 'Erro!';
+			}
+
+			return $this->APP->json($this->return);
+		}
+
 		private function buildPermission($permissions){
 			if (is_array($permissions)) {
 				foreach ($permissions as $permission) {
