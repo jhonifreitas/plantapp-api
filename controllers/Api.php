@@ -380,7 +380,7 @@ namespace controllers{
 			$result = $acao->fetch();
 
 			$ch = curl_init();
-		    curl_setopt($ch,CURLOPT_URL, 'http://'.$result->external_ip.':'.$result->port);
+		    curl_setopt($ch,CURLOPT_URL, 'http://'.$result->local_ip.':'.$result->port);
 		    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 		    // curl_setopt($ch,CURLOPT_HEADER, false); //if you want headers
 
@@ -389,14 +389,17 @@ namespace controllers{
 
 		    $curl_response = curl_exec($ch);
 
-		    if($curl_response === false)
-		    {
-		    	$this->return->status = false;
-		    	$this->return->data = (object) [
-		                "Error Number" => curl_errno($ch),
-		                "Error String" => curl_error($ch)
-		            ];
-		        return false;
+		    if($curl_response === false){
+		    	curl_setopt($ch,CURLOPT_URL, 'http://'.$result->external_ip.':'.$result->port);
+		    	$curl_response = curl_exec($ch);
+		    	if($curl_response === false){
+		    		$this->return->status = false;
+			    	$this->return->data = (object) [
+			                "Error Number" => curl_errno($ch),
+			                "Error String" => curl_error($ch)
+			            ];
+			        return false;
+		    	}
 		    }
 			curl_close($ch);
 			return $curl_response;
